@@ -1,4 +1,4 @@
-package org.example.test;
+package org.example.web;
 
 import org.example.core.WebDriverInstance;
 import org.testng.annotations.Test;

@@ -1,4 +1,4 @@
-package org.example.test;
+package org.example.mobile;
 
 import com.testvagrant.commons.entities.DeviceDetails;
 import com.testvagrant.mdb.android.Android;
