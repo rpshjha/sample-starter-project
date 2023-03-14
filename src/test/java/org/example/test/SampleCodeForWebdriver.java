@@ -3,7 +3,7 @@ package org.example.test;
 import org.example.core.WebDriverInstance;
 import org.testng.annotations.Test;
 
-public class SampleCode {
+public class SampleCodeForWebdriver {
 
     @Test
     void launchBrowser(){
