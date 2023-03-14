@@ -6,7 +6,6 @@ import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyE
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import io.cucumber.java.zh_cn.假如;
 import lombok.extern.java.Log;
 
 import java.io.IOException;

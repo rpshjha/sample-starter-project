@@ -14,7 +14,7 @@ import static org.example.core.utilities.PropertyReader.get;
 @Log
 public class WebDriverInstance {
 
-    private static final ThreadLocal<WebDriver> wDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> wDriver = new ThreadLocal();
 
     private WebDriverInstance() {
     }
