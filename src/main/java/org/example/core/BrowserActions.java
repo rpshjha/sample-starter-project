@@ -1,13 +1,14 @@
 package org.example.core;
 
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
-@Log
 public class BrowserActions {
 
+    private static final Logger log = LogManager.getLogger(BrowserActions.class);
     private WebDriver driver;
 
     public BrowserActions(WebDriver driver) {

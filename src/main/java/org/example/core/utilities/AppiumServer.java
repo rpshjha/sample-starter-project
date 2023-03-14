@@ -6,16 +6,17 @@ import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyE
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
 import static org.example.core.utilities.PropertyReader.get;
 
-@Log
 public class AppiumServer {
 
+	private static final Logger log = LogManager.getLogger(AppiumServer.class);
 
 	private AppiumServer() {
 	}

@@ -1,13 +1,16 @@
 package org.example.core.utilities;
 
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-@Log
 public class PropertyReader {
+
+    private static final Logger log = LogManager.getLogger(PropertyReader.class);
+
     private PropertyReader() {
     }
 
@@ -28,7 +31,7 @@ public class PropertyReader {
                 }
             }
         } catch (FileNotFoundException e) {
-            log.severe("file not found " + FILE_NAME);
+            log.error("file not found " + FILE_NAME);
         } catch (IOException e) {
             e.printStackTrace();
         }

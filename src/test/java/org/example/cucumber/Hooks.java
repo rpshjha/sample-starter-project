@@ -5,8 +5,9 @@ import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import lombok.extern.java.Log;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.core.BrowserActions;
 import org.openqa.selenium.OutputType;
 
@@ -19,9 +20,9 @@ import static com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapte
 import static org.example.core.WebDriverInstance.*;
 import static org.example.core.utilities.PropertyReader.get;
 
-@Log
 public class Hooks {
 
+    private static final Logger log = LogManager.getLogger(Hooks.class);
 
     @Before
     public void beforeScenario(Scenario scenario) {
@@ -75,7 +76,7 @@ public class Hooks {
             getCurrentScenario().assignAuthor(System.getProperty("user.name"));
             killDriver();
         } catch (java.lang.NullPointerException exception) {
-            log.severe(exception.getMessage());
+            log.error(exception.getMessage());
             throw new RuntimeException(exception);
         }
     }

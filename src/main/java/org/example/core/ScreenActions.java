@@ -1,6 +1,8 @@
 package org.example.core;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +14,7 @@ import java.time.Duration;
 import static org.example.core.utilities.PropertyReader.get;
 public class ScreenActions {
 
+    private static final Logger log = LogManager.getLogger(ScreenActions.class);
     private final WebDriverWait wait;
 
     public ScreenActions(WebDriver driver) {

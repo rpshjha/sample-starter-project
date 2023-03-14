@@ -5,9 +5,9 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.core.utilities.AppiumServer;
-import org.example.core.utilities.PropertyReader;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -18,11 +18,11 @@ import java.net.URL;
 import static io.appium.java_client.remote.AndroidMobileCapabilityType.PLATFORM_NAME;
 import static io.appium.java_client.remote.AndroidMobileCapabilityType.*;
 import static io.appium.java_client.remote.MobileCapabilityType.*;
-
 import static org.example.core.utilities.PropertyReader.get;
 
-@Log
 public class AndroidManager {
+
+    private static final Logger log = LogManager.getLogger(AndroidManager.class);
 
     private AndroidManager() {
     }
@@ -56,7 +56,7 @@ public class AndroidManager {
 
         } catch (AppiumServerHasNotBeenStartedLocallyException | MalformedURLException | WebDriverException e) {
             e.printStackTrace();
-            log.severe(e.getMessage());
+            log.error(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }

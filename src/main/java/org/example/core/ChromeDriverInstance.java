@@ -1,11 +1,13 @@
 package org.example.core;
 
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-@Log
 public class ChromeDriverInstance {
+
+    private static final Logger log = LogManager.getLogger(ChromeDriverInstance.class);
 
     private ChromeDriverInstance() {
     }

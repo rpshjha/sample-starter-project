@@ -3,11 +3,13 @@ package org.example.core;
 import com.testvagrant.commons.entities.DeviceDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.remote.MobilePlatform;
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.core.utilities.AppiumServer;
 
-@Log
 public class AppiumDriverInstance {
+
+    private static final Logger log = LogManager.getLogger(AppiumDriverInstance.class);
 
     private static final ThreadLocal<AppiumDriver> appiumDriver = new ThreadLocal<>();
 

@@ -1,6 +1,7 @@
 package org.example.core;
 
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
@@ -11,9 +12,9 @@ import static org.example.core.SafariDriverInstance.createDriverUsingSafari;
 import static org.example.core.utilities.PropertyReader.get;
 
 
-@Log
 public class WebDriverInstance {
 
+    private static final Logger log = LogManager.getLogger(WebDriverInstance.class);
     private static final ThreadLocal<WebDriver> wDriver = new ThreadLocal();
 
     private WebDriverInstance() {

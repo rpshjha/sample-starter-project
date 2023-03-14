@@ -4,9 +4,9 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
-import lombok.extern.java.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.core.utilities.AppiumServer;
-import org.example.core.utilities.PropertyReader;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -16,11 +16,11 @@ import java.net.URL;
 
 import static io.appium.java_client.remote.IOSMobileCapabilityType.BUNDLE_ID;
 import static io.appium.java_client.remote.MobileCapabilityType.*;
-
 import static org.example.core.utilities.PropertyReader.get;
 
-@Log
 public class IOSManager {
+
+    private static final Logger log = LogManager.getLogger(IOSManager.class);
 
     private IOSManager() {
     }
@@ -42,7 +42,7 @@ public class IOSManager {
 
         } catch (AppiumServerHasNotBeenStartedLocallyException | MalformedURLException | WebDriverException e) {
             e.printStackTrace();
-            log.severe(e.getMessage());
+            log.error(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
