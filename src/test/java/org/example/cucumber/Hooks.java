@@ -6,8 +6,8 @@ import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.example.core.BrowserActions;
 import org.openqa.selenium.OutputType;
 
@@ -22,7 +22,7 @@ import static org.example.utilities.PropertyReader.get;
 
 public class Hooks {
 
-    private static final Logger log = LogManager.getLogger(Hooks.class);
+    private static final Logger log = LoggerFactory.getLogger(Hooks.class);
 
     @Before
     public void beforeScenario(Scenario scenario) {

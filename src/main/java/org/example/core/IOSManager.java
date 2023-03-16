@@ -4,8 +4,8 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.example.utilities.AppiumServer;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -20,7 +20,7 @@ import static org.example.utilities.PropertyReader.get;
 
 public class IOSManager {
 
-    private static final Logger log = LogManager.getLogger(IOSManager.class);
+    private static final Logger log = LoggerFactory.getLogger(IOSManager.class);
 
     private IOSManager() {
     }

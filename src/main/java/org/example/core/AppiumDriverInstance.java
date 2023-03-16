@@ -3,14 +3,13 @@ package org.example.core;
 import com.testvagrant.commons.entities.DeviceDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.remote.MobilePlatform;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.example.utilities.AppiumServer;
+import org.example.utilities.PropertyReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AppiumDriverInstance {
-
-    private static final Logger log = LogManager.getLogger(AppiumDriverInstance.class);
-
+    private static final Logger log = LoggerFactory.getLogger(AppiumDriverInstance.class);
     private static final ThreadLocal<AppiumDriver> appiumDriver = new ThreadLocal<>();
 
     private AppiumDriverInstance() {
@@ -29,7 +28,7 @@ public class AppiumDriverInstance {
     public static AppiumDriver setUpAppiumDriver(DeviceDetails deviceDetails, String systemPort,
                                                  String appiumPort) {
 
-        switch (System.getProperty("platformName")) {
+        switch (PropertyReader.get("platformName")) {
 
             case MobilePlatform.ANDROID:
                 return AndroidManager.createAndroidDriver(deviceDetails, systemPort, appiumPort);
@@ -41,7 +40,22 @@ public class AppiumDriverInstance {
                 System.err.println("enter platformName as Android or iOS");
                 return null;
         }
+    }
 
+    public static AppiumDriver setUpAppiumDriver(DeviceDetails deviceDetails) {
+
+        switch (System.getProperty("platformName")) {
+
+            case MobilePlatform.ANDROID:
+                return AndroidManager.createAndroidDriver(deviceDetails, null, "");
+
+            case MobilePlatform.IOS:
+                return IOSManager.createIOSDriver();
+
+            default:
+                System.err.println("enter platformName as Android or iOS");
+                return null;
+        }
     }
 
     /**

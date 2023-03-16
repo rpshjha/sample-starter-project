@@ -6,8 +6,8 @@ import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyE
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,7 +16,7 @@ import static org.example.utilities.PropertyReader.get;
 
 public class AppiumServer {
 
-	private static final Logger log = LogManager.getLogger(AppiumServer.class);
+	private static final Logger log = LoggerFactory.getLogger(AppiumServer.class);
 
 	private AppiumServer() {
 	}
@@ -31,7 +31,7 @@ public class AppiumServer {
 		appiumServiceBuilder.withArgument(GeneralServerFlag.SESSION_OVERRIDE);
 		appiumServiceBuilder.withArgument(GeneralServerFlag.LOG_LEVEL, "error");
 
-		if (System.getProperty("platformName").equalsIgnoreCase(MobilePlatform.ANDROID))
+		if (get("platformName").equalsIgnoreCase(MobilePlatform.ANDROID))
 			appiumServiceBuilder.withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER,
 					String.valueOf(aRandomOpenPortOnAllLocalInterfaces()));
 

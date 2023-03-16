@@ -7,11 +7,12 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -24,11 +25,11 @@ import static io.appium.java_client.remote.MobileBrowserType.CHROME;
 import static io.appium.java_client.remote.MobileCapabilityType.*;
 import static io.appium.java_client.remote.MobilePlatform.ANDROID;
 
-@Log
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestCodeForAppium {
 
     private AppiumDriver appiumDriver;
+    private Logger log = LoggerFactory.getLogger(TestCodeForAppium.class);
     private boolean onMobileBrowser = false;
 
     @BeforeAll

@@ -1,7 +1,7 @@
 package org.example.utilities;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class PropertyReader {
 
-    private static final Logger log = LogManager.getLogger(PropertyReader.class);
+    private static final Logger log = LoggerFactory.getLogger(PropertyReader.class);
 
     private PropertyReader() {
     }
