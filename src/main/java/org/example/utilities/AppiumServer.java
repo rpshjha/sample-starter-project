@@ -1,4 +1,4 @@
-package org.example.core.utilities;
+package org.example.utilities;
 
 import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import static org.example.core.utilities.PropertyReader.get;
+import static org.example.utilities.PropertyReader.get;
 
 public class AppiumServer {
 

@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import static org.example.core.utilities.PropertyReader.get;
+import static org.example.utilities.PropertyReader.get;
 public class ScreenActions {
 
     private static final Logger log = LogManager.getLogger(ScreenActions.class);

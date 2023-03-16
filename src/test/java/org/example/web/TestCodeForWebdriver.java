@@ -1,7 +1,8 @@
 package org.example.web;
 
 import org.example.core.WebDriverInstance;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class TestCodeForWebdriver {
 

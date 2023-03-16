@@ -18,7 +18,7 @@ import java.time.Duration;
 import static com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter.getCurrentScenario;
 import static com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter.getCurrentStep;
 import static org.example.core.WebDriverInstance.*;
-import static org.example.core.utilities.PropertyReader.get;
+import static org.example.utilities.PropertyReader.get;
 
 public class Hooks {
 

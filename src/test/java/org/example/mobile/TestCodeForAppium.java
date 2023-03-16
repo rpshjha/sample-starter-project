@@ -8,9 +8,10 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import lombok.extern.java.Log;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -24,12 +25,13 @@ import static io.appium.java_client.remote.MobileCapabilityType.*;
 import static io.appium.java_client.remote.MobilePlatform.ANDROID;
 
 @Log
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestCodeForAppium {
 
     private AppiumDriver appiumDriver;
     private boolean onMobileBrowser = false;
 
-    @BeforeTest
+    @BeforeAll
     void setup() throws Exception {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();

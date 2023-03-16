@@ -9,7 +9,7 @@ import java.time.Duration;
 import static org.example.core.ChromeDriverInstance.createDriverUsingChrome;
 import static org.example.core.FirefoxDriverInstance.createDriverUsingFirefox;
 import static org.example.core.SafariDriverInstance.createDriverUsingSafari;
-import static org.example.core.utilities.PropertyReader.get;
+import static org.example.utilities.PropertyReader.get;
 
 
 public class WebDriverInstance {
