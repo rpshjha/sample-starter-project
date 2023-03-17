@@ -37,10 +37,10 @@ public class IOSManager {
         try {
 
             DesiredCapabilities capabilities = setIOSCapability();
-            URL appiumServiceUrl = AppiumServer.startServerOnAnyPort().getUrl();
+            URL appiumServiceUrl = AppiumServer.startServer(4723).getUrl();
             iosDriver = new IOSDriver(appiumServiceUrl, capabilities);
 
-        } catch (AppiumServerHasNotBeenStartedLocallyException | MalformedURLException | WebDriverException e) {
+        } catch (AppiumServerHasNotBeenStartedLocallyException | WebDriverException e) {
             e.printStackTrace();
             log.error(e.getMessage());
         } catch (Exception e) {

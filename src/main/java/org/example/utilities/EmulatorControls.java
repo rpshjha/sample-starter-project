@@ -109,7 +109,7 @@ public class EmulatorControls {
             }
             if (!output.toString().replace("List of devices attached", "").trim().equals("")) {
                 isRunning = true;
-                log.info("List of devices attached {}\n", output.toString().replace("List of devices attached", ""));
+                log.info("List of devices attached\n{}", output.toString().replace("List of devices attached", ""));
             }
 
         } catch (Exception e) {

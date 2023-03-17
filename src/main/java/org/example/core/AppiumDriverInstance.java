@@ -17,14 +17,7 @@ public class AppiumDriverInstance {
 
     /**
      * set up appium driver based on platform provided in config file
-     *
-     * @param deviceDetails
-     * @param systemPort
-     * @param systemPort
-     * @param appiumPort
-     * @return appiumDriver {@link AppiumDriver}
      */
-
     public static AppiumDriver setUpAppiumDriver(DeviceDetails deviceDetails, String systemPort,
                                                  String appiumPort) {
 
@@ -37,7 +30,7 @@ public class AppiumDriverInstance {
                 return IOSManager.createIOSDriver();
 
             default:
-                System.err.println("enter platformName as Android or iOS");
+                log.error("enter platformName as Android or iOS");
                 return null;
         }
     }
@@ -53,7 +46,7 @@ public class AppiumDriverInstance {
                 return IOSManager.createIOSDriver();
 
             default:
-                System.err.println("enter platformName as Android or iOS");
+                log.error("enter platformName as Android or iOS");
                 return null;
         }
     }

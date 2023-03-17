@@ -7,14 +7,18 @@ import org.example.utilities.EmulatorControls;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestCodeForAppium_1 {
 
+    private static final Logger log = LoggerFactory.getLogger(TestCodeForAppium_1.class);
+
     @BeforeAll
     void setup() throws Exception {
 
-        System.out.println("in setup");
+        log.info("In Setup Method..");
 
         EmulatorControls.launchEmulator("Pixel_4_API_28");
 
@@ -30,7 +34,7 @@ public class TestCodeForAppium_1 {
 
     @Test
     void tearDown() {
-
+        AppiumDriverInstance.quitAppiumDriver();
     }
 
 }

@@ -5,19 +5,19 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
-import org.example.utilities.AppiumServer;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static io.appium.java_client.remote.AndroidMobileCapabilityType.PLATFORM_NAME;
 import static io.appium.java_client.remote.AndroidMobileCapabilityType.*;
+import static io.appium.java_client.remote.MobileBrowserType.CHROME;
 import static io.appium.java_client.remote.MobileCapabilityType.*;
+import static org.example.utilities.AppiumServer.startServer;
 import static org.example.utilities.PropertyReader.get;
 
 public class AndroidManager {
@@ -29,32 +29,27 @@ public class AndroidManager {
 
     /**
      * creates android driver
-     *
-     * @param deviceDetails
-     * @param systemPort
-     * @param appiumPort
-     * @return AndroidDriver
      */
     public static AndroidDriver createAndroidDriver(DeviceDetails deviceDetails, String systemPort,
                                                     String appiumPort) {
         AndroidDriver androidDriver = null;
+        DesiredCapabilities cap = setAndroidCapability(deviceDetails, systemPort);
         try {
-            DesiredCapabilities cap = setAndroidCapability(deviceDetails, systemPort);
             URL appiumServiceUrl;
 
             if (appiumPort == null || appiumPort.isEmpty()) {
-                System.err.println("appium port NOT received, using default port provided in config property");
-                appiumServiceUrl = AppiumServer.startServer(Integer.parseInt(get("appiumPort")))
+                log.info("appium port NOT received, using default port provided");
+                appiumServiceUrl = startServer(Integer.parseInt(get("appiumPort")))
                         .getUrl();
             } else {
-                appiumServiceUrl = AppiumServer.startServer(Integer.parseInt(appiumPort)).getUrl();
+                appiumServiceUrl = startServer(Integer.parseInt(appiumPort)).getUrl();
             }
 
             log.info("initializing android driver");
             androidDriver = new AndroidDriver(appiumServiceUrl, cap);
             log.info("android driver initialized");
 
-        } catch (AppiumServerHasNotBeenStartedLocallyException | MalformedURLException | WebDriverException e) {
+        } catch (AppiumServerHasNotBeenStartedLocallyException | WebDriverException e) {
             e.printStackTrace();
             log.error(e.getMessage());
         } catch (Exception e) {
@@ -67,10 +62,6 @@ public class AndroidManager {
 
     /**
      * set desired capability
-     *
-     * @param deviceDetails
-     * @param systemPort
-     * @return DesiredCapabilities
      */
     private static DesiredCapabilities setAndroidCapability(DeviceDetails deviceDetails, String systemPort) {
 
@@ -82,7 +73,6 @@ public class AndroidManager {
         else if (!systemPort.isEmpty())
             cap.setCapability(SYSTEM_PORT, Integer.valueOf(systemPort));
 
-
         if (deviceDetails == null) {
             cap.setCapability(AVD, get("nameOfAVD"));
             cap.setCapability(DEVICE_NAME, get("nameOfAVD"));
@@ -93,9 +83,15 @@ public class AndroidManager {
         }
 
         cap.setCapability(PLATFORM_NAME, MobilePlatform.ANDROID);
-        cap.setCapability(APP, new File(get("apk")).getPath());
-        cap.setCapability(APP_PACKAGE, get("appPackage"));
-        cap.setCapability(APP_ACTIVITY, get("appActivity"));
+        if (get("onMobileBrowser").equals("true")) {
+            cap.setCapability(BROWSER_NAME, CHROME);
+        } else {
+            if (!get("apk").isEmpty())
+                cap.setCapability(APP, new File(get("apk")).getPath());
+            cap.setCapability(APP_PACKAGE, get("appPackage"));
+            cap.setCapability(APP_ACTIVITY, get("appActivity"));
+        }
+        cap.setCapability(ADB_EXEC_TIMEOUT, 40000);
         cap.setCapability(NEW_COMMAND_TIMEOUT, newCommandTimeout);
         cap.setCapability(AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
         cap.setCapability(AUTO_GRANT_PERMISSIONS, true);

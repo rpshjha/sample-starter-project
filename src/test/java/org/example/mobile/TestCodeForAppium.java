@@ -38,7 +38,6 @@ public class TestCodeForAppium {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability("avd", "Pixel_4_API_28");
-
         DeviceDetails deviceDetails = new Android().getDevices().get(0);
         capabilities.setCapability(UDID, deviceDetails.getUdid());
         capabilities.setCapability(PLATFORM_VERSION, deviceDetails.getOsVersion());
