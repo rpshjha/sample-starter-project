@@ -12,9 +12,8 @@ import static org.example.core.SafariDriverInstance.createDriverUsingSafari;
 import static org.example.utilities.PropertyReader.get;
 
 public class WebDriverInstance {
-
     private static final Logger log = LoggerFactory.getLogger(WebDriverInstance.class);
-    private static final ThreadLocal<WebDriver> wDriver = new ThreadLocal();
+    private static final ThreadLocal<WebDriver> wDriver = new ThreadLocal<>();
 
     private WebDriverInstance() {
     }
@@ -42,6 +41,7 @@ public class WebDriverInstance {
                 driver = createDriverUsingSafari();
                 break;
             default:
+                log.error("Browser name provided is not correct..!!");
                 break;
         }
 

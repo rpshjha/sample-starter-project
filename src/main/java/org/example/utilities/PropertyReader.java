@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class PropertyReader {
-
     private static final Logger log = LoggerFactory.getLogger(PropertyReader.class);
 
     private PropertyReader() {
@@ -31,7 +30,7 @@ public class PropertyReader {
                 }
             }
         } catch (FileNotFoundException e) {
-            log.error("file not found " + FILE_NAME);
+            log.error("File not found => {}", FILE_NAME);
         } catch (IOException e) {
             e.printStackTrace();
         }
