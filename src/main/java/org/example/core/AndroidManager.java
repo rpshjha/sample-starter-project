@@ -5,20 +5,21 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
+import org.example.utilities.PropertyReader;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.URL;
 
+import static io.appium.java_client.remote.AndroidMobileCapabilityType.BROWSER_NAME;
 import static io.appium.java_client.remote.AndroidMobileCapabilityType.PLATFORM_NAME;
 import static io.appium.java_client.remote.AndroidMobileCapabilityType.*;
-import static io.appium.java_client.remote.MobileBrowserType.CHROME;
 import static io.appium.java_client.remote.MobileCapabilityType.*;
 import static org.example.utilities.AppiumServer.startServer;
-import static org.example.utilities.PropertyReader.get;
+import static org.example.utilities.RandomUtils.randomSystemPort;
+import static org.openqa.selenium.remote.Browser.CHROME;
 
 public class AndroidManager {
 
@@ -30,72 +31,54 @@ public class AndroidManager {
     /**
      * creates android driver
      */
-    public static AndroidDriver createAndroidDriver(DeviceDetails deviceDetails, String systemPort,
-                                                    String appiumPort) {
-        AndroidDriver androidDriver = null;
-        DesiredCapabilities cap = setAndroidCapability(deviceDetails, systemPort);
+    public static AndroidDriver createAndroidDriver(DeviceDetails deviceDetails, AndroidCapability androidCapability) {
         try {
-            URL appiumServiceUrl;
-
-            if (appiumPort == null || appiumPort.isEmpty()) {
-                log.info("appium port NOT received, using default port provided");
-                appiumServiceUrl = startServer(Integer.parseInt(get("appiumPort")))
-                        .getUrl();
-            } else {
-                appiumServiceUrl = startServer(Integer.parseInt(appiumPort)).getUrl();
-            }
-
-            log.info("initializing android driver");
-            androidDriver = new AndroidDriver(appiumServiceUrl, cap);
-            log.info("android driver initialized");
-
+            log.info("initializing android driver..");
+            return new AndroidDriver(startServer(androidCapability.getIp(), androidCapability.getPort()).getUrl(), setAndroidCapability(deviceDetails, androidCapability));
         } catch (AppiumServerHasNotBeenStartedLocallyException | WebDriverException e) {
-            e.printStackTrace();
+            log.error("android driver could not be initialized.. !!");
             log.error(e.getMessage());
+            throw new RuntimeException(e);
         } catch (Exception e) {
+            log.error(e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return androidDriver;
     }
 
 
     /**
      * set desired capability
      */
-    private static DesiredCapabilities setAndroidCapability(DeviceDetails deviceDetails, String systemPort) {
+    private static DesiredCapabilities setAndroidCapability(DeviceDetails deviceDetails, AndroidCapability androidCapability) {
 
         DesiredCapabilities cap = new DesiredCapabilities();
-        int newCommandTimeout = Integer.parseInt(get("newCommandTimeout"));
 
-        if (systemPort == null)
+        if (androidCapability.getSystemPort() == null || androidCapability.getSystemPort().isEmpty())
             log.info("system port NOT received, ignoring system port capability");
-        else if (!systemPort.isEmpty())
-            cap.setCapability(SYSTEM_PORT, Integer.valueOf(systemPort));
+        else
+            cap.setCapability(SYSTEM_PORT, randomSystemPort());
 
-        if (deviceDetails == null) {
-            cap.setCapability(AVD, get("nameOfAVD"));
-            cap.setCapability(DEVICE_NAME, get("nameOfAVD"));
-        } else {
-            cap.setCapability(UDID, deviceDetails.getUdid());
-            cap.setCapability(DEVICE_NAME, deviceDetails.getDeviceName());
-            cap.setCapability(PLATFORM_VERSION, deviceDetails.getOsVersion());
-        }
+        cap.setCapability(UDID, deviceDetails.getUdid());
+        cap.setCapability(DEVICE_NAME, deviceDetails.getDeviceName());
+        cap.setCapability(PLATFORM_VERSION, deviceDetails.getOsVersion());
 
         cap.setCapability(PLATFORM_NAME, MobilePlatform.ANDROID);
-        if (get("onMobileBrowser").equals("true")) {
+
+        if (PropertyReader.instance().getValue("onMobileBrowser").equals("true")) {
             cap.setCapability(BROWSER_NAME, CHROME);
         } else {
-            if (!get("apk").isEmpty())
-                cap.setCapability(APP, new File(get("apk")).getPath());
-            cap.setCapability(APP_PACKAGE, get("appPackage"));
-            cap.setCapability(APP_ACTIVITY, get("appActivity"));
+            if (!androidCapability.getApkPath().isEmpty())
+                cap.setCapability(APP, new File(androidCapability.getApkPath()).getPath());
+            cap.setCapability(APP_PACKAGE, androidCapability.getAppPackage());
+            cap.setCapability(APP_ACTIVITY, androidCapability.getAppActivity());
         }
+
         cap.setCapability(ADB_EXEC_TIMEOUT, 40000);
-        cap.setCapability(NEW_COMMAND_TIMEOUT, newCommandTimeout);
+        cap.setCapability(NEW_COMMAND_TIMEOUT, 60);
         cap.setCapability(AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
         cap.setCapability(AUTO_GRANT_PERMISSIONS, true);
-        cap.setCapability(NO_RESET, false);
+        cap.setCapability(NO_RESET, true);
 
         return cap;
     }

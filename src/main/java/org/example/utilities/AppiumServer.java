@@ -1,68 +1,66 @@
 package org.example.utilities;
 
-import io.appium.java_client.remote.MobilePlatform;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.time.Duration;
 
-import static org.example.utilities.PropertyReader.get;
+import static io.appium.java_client.remote.MobilePlatform.ANDROID;
+import static io.appium.java_client.service.local.flags.AndroidServerFlag.BOOTSTRAP_PORT_NUMBER;
+import static org.example.utilities.RandomUtils.aRandomOpenPortOnAllLocalInterfaces;
+import static org.openqa.selenium.remote.CapabilityType.PLATFORM_NAME;
+
 
 public class AppiumServer {
 
     private static final Logger log = LoggerFactory.getLogger(AppiumServer.class);
     private static final ThreadLocal<AppiumDriverLocalService> appiumService = new ThreadLocal<>();
+    private static final String NODE_PATH = "/usr/local/bin/node";
+    private static final String APPIUM_JS_PATH = "/usr/local/lib/node_modules/appium/build/lib/main.js";
 
     private AppiumServer() {
     }
 
-    public static AppiumDriverLocalService startServer(int port) {
+    public static AppiumDriverLocalService startServer(String ip, String port) {
+
+        if (ip == null || ip.isEmpty()) {
+            ip = "0.0.0.0";
+            log.info("appium ip NOT received, using default ip {}", ip);
+        }
+        if (port == null || port.isEmpty()) {
+            port = "4723";
+            log.info("appium port NOT received, using default port {}", port);
+        }
 
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
-        appiumServiceBuilder.withIPAddress(get("ip"));
-        appiumServiceBuilder.usingPort(port);
+        appiumServiceBuilder.withIPAddress(ip);
+        appiumServiceBuilder.usingPort(Integer.parseInt(port));
         appiumServiceBuilder.withArgument(GeneralServerFlag.SESSION_OVERRIDE);
         appiumServiceBuilder.withArgument(GeneralServerFlag.LOG_LEVEL, "error");
-        appiumServiceBuilder.usingDriverExecutable(new File("/usr/local/bin/node"));
-        appiumServiceBuilder.withAppiumJS(new File("/usr/local/lib/node_modules/appium/build/lib/main.js"));
+        appiumServiceBuilder.usingDriverExecutable(new File(NODE_PATH));
+        appiumServiceBuilder.withAppiumJS(new File(APPIUM_JS_PATH));
         appiumServiceBuilder.withArgument(GeneralServerFlag.BASEPATH, "/wd/hub/");
 
-        if (get("platformName").equalsIgnoreCase(MobilePlatform.ANDROID))
-            appiumServiceBuilder.withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER,
-                    String.valueOf(aRandomOpenPortOnAllLocalInterfaces()));
+        if (PropertyReader.instance().getValue(PLATFORM_NAME).equalsIgnoreCase(ANDROID))
+            appiumServiceBuilder.withArgument(BOOTSTRAP_PORT_NUMBER, aRandomOpenPortOnAllLocalInterfaces());
 
         appiumService.set(AppiumDriverLocalService.buildService(appiumServiceBuilder));
 
-        log.info("starting appium server");
+        log.info("starting appium server ..");
         appiumService.get().clearOutPutStreams();
         appiumService.get().start();
 
-        if (appiumService.get() == null || !appiumService.get().isRunning())
+        if (appiumService.get() == null || !appiumService.get().isRunning()) {
+            log.error("appium server could not be started..!!");
             throw new AppiumServerHasNotBeenStartedLocallyException("An appium server node is not started!");
-        else
+        } else {
             log.info("appium server started at : {}", appiumService.get().getUrl());
-        return appiumService.get();
-    }
-
-    private boolean isAppiumServiceRunning(int port) {
-        boolean isServerRunning = false;
-        ServerSocket serverSocket;
-        try {
-            serverSocket = new ServerSocket(port);
-            serverSocket.close();
-        } catch (IOException e) {
-            // If control comes here, then it means that the port is in use
-            isServerRunning = true;
+            return appiumService.get();
         }
-        return isServerRunning;
     }
 
     public static void stopServer() {
@@ -70,14 +68,6 @@ public class AppiumServer {
         if (appiumService.get() != null) {
             appiumService.get().stop();
             appiumService.remove();
-        }
-    }
-
-    private static int aRandomOpenPortOnAllLocalInterfaces() {
-        try (ServerSocket socket = new ServerSocket(0)) {
-            return socket.getLocalPort();
-        } catch (IOException e) {
-            throw new RuntimeException("no open ports found for bootstrap");
         }
     }
 

@@ -1,15 +1,15 @@
 package org.example.core;
 
+import org.example.utilities.PropertyReader;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 
 import static org.example.core.ChromeDriverInstance.createDriverUsingChrome;
 import static org.example.core.FirefoxDriverInstance.createDriverUsingFirefox;
 import static org.example.core.SafariDriverInstance.createDriverUsingSafari;
-import static org.example.utilities.PropertyReader.get;
 
 public class WebDriverInstance {
     private static final Logger log = LoggerFactory.getLogger(WebDriverInstance.class);
@@ -46,9 +46,9 @@ public class WebDriverInstance {
         }
 
         assert driver != null;
-        if (Boolean.parseBoolean(get("isWindowMax")))
+        if (Boolean.parseBoolean(PropertyReader.instance().getValue("isWindowMax")))
             driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Long.parseLong(get("page.load.timeout"))));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Long.parseLong(PropertyReader.instance().getValue("page.load.timeout"))));
 
         return driver;
     }

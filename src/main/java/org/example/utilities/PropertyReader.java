@@ -3,44 +3,53 @@ package org.example.utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyReader {
+
     private static final Logger log = LoggerFactory.getLogger(PropertyReader.class);
+    private static PropertyReader instance;
+    private static Properties properties;
+    private static final String DEFAULT_FILE_NAME = "application.properties";
+
 
     private PropertyReader() {
+        initProperty(DEFAULT_FILE_NAME);
     }
 
-    private static Properties properties = null;
-    private static final String FILE_NAME = "application.properties";
-
-    static {
-        initProperty();
+    private PropertyReader(String fileName) {
+        initProperty(fileName);
     }
 
-    private static void initProperty() {
-        try {
-            try (InputStream is = PropertyReader.class.getClassLoader().getResourceAsStream(FILE_NAME)) {
-                assert is != null;
-                try (Reader bufferedReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                    properties = new Properties();
-                    properties.load(bufferedReader);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            log.error("File not found => {}", FILE_NAME);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static synchronized PropertyReader instance() {
+        if (instance == null) {
+            instance = new PropertyReader();
+        }
+        return instance;
+    }
+
+    public static synchronized PropertyReader instance(String fileName) {
+        if (instance == null) {
+            instance = new PropertyReader(fileName);
+        }
+        return instance;
+    }
+
+    private static void initProperty(String fileName) {
+        try (InputStream is = PropertyReader.class.getClassLoader().getResourceAsStream(fileName)) {
+            assert is != null;
+            properties = new Properties();
+            properties.load(is);
+        } catch (IOException ex) {
+            log.error(ex.getMessage());
+            throw new RuntimeException(ex);
         }
     }
 
-    /**
-     * @param name key
-     * @return String
-     */
-    public static String get(String name) {
-        return properties.getProperty(name);
+    public String getValue(String key) {
+        return properties.getProperty(key, String.format("The key %s does not exists!", key));
     }
+
 }

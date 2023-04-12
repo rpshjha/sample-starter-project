@@ -14,6 +14,6 @@ import static io.cucumber.core.options.Constants.*;
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "org.example.cucumber")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:")
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@001")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@postcode")
 public class JunitCucumberRunner {
 }

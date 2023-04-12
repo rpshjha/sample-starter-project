@@ -1,24 +1,23 @@
 package org.example.core;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.example.utilities.PropertyReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-
-import static org.example.utilities.PropertyReader.get;
 public class ScreenActions {
 
     private static final Logger log = LoggerFactory.getLogger(ScreenActions.class);
     private final WebDriverWait wait;
 
     public ScreenActions(WebDriver driver) {
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(get("default.timeout"))));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(PropertyReader.instance().getValue("default.timeout"))));
     }
 
     public void click(By locator) {
